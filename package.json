@@ -22,9 +22,12 @@
   },
   "homepage": "https://github.com/dor-rondel/confidential-rag-chatbot#readme",
   "dependencies": {
+    "@chroma-core/default-embed": "^0.1.8",
+    "chromadb": "^3.0.14",
     "next": "^15.5.0",
     "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react-dom": "^19.1.1",
+    "server-only": "^0.0.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.12",
