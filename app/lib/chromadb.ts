@@ -1,7 +1,13 @@
 import 'server-only';
 import { ChromaClient } from 'chromadb';
+import { ChromaHealthResponse } from './types';
 
-export async function getChromaHealth() {
+/**
+ * Checks the health of the ChromaDB server.
+ * 
+ * @returns {Promise<ChromaHealthResponse>} A promise that resolves to an object indicating the health status.
+ */
+export async function getChromaHealth(): Promise<ChromaHealthResponse> {
   const client = new ChromaClient();
   try {
     const isAlive = await client.heartbeat();

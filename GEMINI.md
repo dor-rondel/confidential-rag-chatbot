@@ -232,20 +232,14 @@ const theme = {
 - Co-located with components using `.test.ts` suffix
 - Use `describe` and `it` blocks for test structure
 - Write tests without requiring `@ts-ignore` or similar disables
-- Utility functions and data processing logic
-- Component rendering and behavior
-- LangChain chunking logic
-- Embedding transformations
-- Server Actions and ChromaDB/Ollama integrations
+- Prefer `vi.mock` over `vi.doMock` when possible for modules
+- Prefer `vi.stubGlobal` over overwriting global/window properties
+- Use strict equality checks: `.strictEquals()` over `.equals()`, `.toBe(true)` over `.toBeTruthy()`, and `.toBe(false)` over `.toBeFalsy()`
+- Since we set `mockReset: true` in `vitest.config.mts`, there's no need to reset mocks in beforeEach or afterEach hooks
 
 ### E2E Tests (Playwright)
 
 - Located in `/tests/e2e/` with `.spec.ts` suffix
-- Complete user journeys
-- File upload → chat flow
-- Error scenarios
-- Service health checks
-- Responsive design validation
 
 ## Persona & Communication Style
 
