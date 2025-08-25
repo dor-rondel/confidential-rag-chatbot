@@ -16,13 +16,12 @@ export async function GET() {
         status: isHealthy ? 'ok' : 'error',
         ollama,
         chromadb,
-      },
-      { status: isHealthy ? 200 : 503 },
+        statusCode: isHealthy ? 200 : 503,
+      }
     );
   } catch (error) {
     return NextResponse.json(
-      { status: 'error', message: 'An unexpected error occurred' },
-      { status: 500 },
+      { status: 'error', message: 'An unexpected error occurred', statusCode: 500 },
     );
   }
 }
