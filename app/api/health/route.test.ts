@@ -13,14 +13,17 @@ vi.mock('@/app/lib/chromadb', () => ({
 
 vi.mock('next/server', () => ({
   NextResponse: {
-    json: vi.fn((data) => data),
+    json: vi.fn(data => data),
   },
 }));
 
+const ollamaMock = vi.mocked(getOllamaHealth);
+const chromaMock = vi.mocked(getChromaHealth);
+
 describe('Health API Route', () => {
   it('should return ok status when both services are healthy', async () => {
-    (getOllamaHealth as any).mockResolvedValue({ status: 'ok', models: ['model1'] });
-    (getChromaHealth as any).mockResolvedValue({ status: 'ok' });
+    ollamaMock.mockResolvedValue({ status: 'ok', models: ['model1'] });
+    chromaMock.mockResolvedValue({ status: 'ok' });
 
     const response = await GET();
     expect(response).toEqual({
@@ -32,8 +35,11 @@ describe('Health API Route', () => {
   });
 
   it('should return error status when Ollama is unhealthy', async () => {
-    (getOllamaHealth as any).mockResolvedValue({ status: 'error', message: 'Ollama not responding' });
-    (getChromaHealth as any).mockResolvedValue({ status: 'ok' });
+    ollamaMock.mockResolvedValue({
+      status: 'error',
+      message: 'Ollama not responding',
+    });
+    chromaMock.mockResolvedValue({ status: 'ok' });
 
     const response = await GET();
     expect(response).toEqual({
@@ -45,8 +51,11 @@ describe('Health API Route', () => {
   });
 
   it('should return error status when ChromaDB is unhealthy', async () => {
-    (getOllamaHealth as any).mockResolvedValue({ status: 'ok', models: ['model1'] });
-    (getChromaHealth as any).mockResolvedValue({ status: 'error', message: 'ChromaDB not responding' });
+    ollamaMock.mockResolvedValue({ status: 'ok', models: ['model1'] });
+    chromaMock.mockResolvedValue({
+      status: 'error',
+      message: 'ChromaDB not responding',
+    });
 
     const response = await GET();
     expect(response).toEqual({
@@ -58,8 +67,14 @@ describe('Health API Route', () => {
   });
 
   it('should return error status when both services are unhealthy', async () => {
-    (getOllamaHealth as any).mockResolvedValue({ status: 'error', message: 'Ollama not responding' });
-    (getChromaHealth as any).mockResolvedValue({ status: 'error', message: 'ChromaDB not responding' });
+    ollamaMock.mockResolvedValue({
+      status: 'error',
+      message: 'Ollama not responding',
+    });
+    chromaMock.mockResolvedValue({
+      status: 'error',
+      message: 'ChromaDB not responding',
+    });
 
     const response = await GET();
     expect(response).toEqual({
@@ -71,8 +86,8 @@ describe('Health API Route', () => {
   });
 
   it('should return an unexpected error status on caught exception', async () => {
-    (getOllamaHealth as any).mockRejectedValue(new Error('Network error'));
-    (getChromaHealth as any).mockResolvedValue({ status: 'ok' }); // This won't be called due to Promise.all short-circuiting
+    ollamaMock.mockRejectedValue(new Error('Network error'));
+    chromaMock.mockResolvedValue({ status: 'ok' }); // This won't be called due to Promise.all short-circuiting
 
     const response = await GET();
     expect(response).toEqual({
