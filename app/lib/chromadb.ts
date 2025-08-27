@@ -4,7 +4,7 @@ import { ChromaHealthResponse } from './types';
 
 /**
  * Checks the health of the ChromaDB server.
- * 
+ *
  * @returns {Promise<ChromaHealthResponse>} A promise that resolves to an object indicating the health status.
  */
 export async function getChromaHealth(): Promise<ChromaHealthResponse> {
@@ -15,7 +15,7 @@ export async function getChromaHealth(): Promise<ChromaHealthResponse> {
       return { status: 'ok' };
     }
     return { status: 'error', message: 'ChromaDB is not responding' };
-  } catch (error) {
+  } catch {
     return { status: 'error', message: 'ChromaDB is not reachable' };
   }
 }

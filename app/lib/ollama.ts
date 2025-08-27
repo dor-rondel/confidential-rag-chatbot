@@ -3,7 +3,7 @@ import { OllamaHealthResponse } from './types';
 
 /**
  * Checks the health of the Ollama server and retrieves available models.
- * 
+ *
  * @returns {Promise<OllamaHealthResponse>} A promise that resolves to an object indicating the health status and models, or an error.
  */
 export async function getOllamaHealth(): Promise<OllamaHealthResponse> {
@@ -13,11 +13,13 @@ export async function getOllamaHealth(): Promise<OllamaHealthResponse> {
       const data = await response.json();
       return {
         status: 'ok',
-        models: data.models.map((model: any) => model.name),
+        models: data.models.map(
+          (model: unknown) => (model as { name: string }).name
+        ),
       };
     }
     return { status: 'error', message: 'Ollama is not responding' };
-  } catch (error) {
+  } catch {
     return { status: 'error', message: 'Ollama is not reachable' };
   }
 }

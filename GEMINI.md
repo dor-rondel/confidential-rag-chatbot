@@ -108,6 +108,8 @@ npm run dev
 - **DYC (Document Your Code)**: Use JSDoc comments for functions and complex logic
 - **Return Early**: Use early returns to reduce nesting and improve readability
 - **Input Validation**: Never trust client input; always validate and sanitize
+- **Static Typing**: Do not use `any` we're using ESLint in strict mode
+- **No Unused Variables**: Only create variables if they're used, whether it be imports or catch blocks etc.
 
 ### Development Principles
 
@@ -231,11 +233,13 @@ const theme = {
 
 - Co-located with components using `.test.ts` suffix
 - Use `describe` and `it` blocks for test structure
-- Write tests without requiring `@ts-ignore` or similar disables
-- Prefer `vi.mock` over `vi.doMock` when possible for modules
-- Prefer `vi.stubGlobal` over overwriting global/window properties
-- Use strict equality checks: `.strictEquals()` over `.equals()`, `.toBe(true)` over `.toBeTruthy()`, and `.toBe(false)` over `.toBeFalsy()`
-- Since we set `mockReset: true` in `vitest.config.mts`, there's no need to reset mocks in beforeEach or afterEach hooks
+- Do not write tests that require disabling TypeScript (e.g. `// @ts-expect-error`), as TypeScript already handles type errors at compile time.
+- Make test result expectations as strict as possible to catch unintended changes (e.g. use `toStrictEqual()` instead of `toEqual()`, `toBe(true)` instead of `toBeTruthy()`, etc.).
+- Prefer `vi.mock()` to mock modules instead of `vi.doMock()` whenever possible.
+- Change the value of environment variables on `process.env` using `vi.stubEnv()`.
+- Mock global functions and variables (e.g. `fetch`, `console`, `window`, etc.) using `vi.stubGlobal()`.
+- Use `vi.mocked()` to provide type safety and intellisense support for mocked methods (e.g. `vi.mocked(fetch).mockResolvedValue(...)`).
+- Do not call `vi.unstubAllGlobals()`, `vi.clearAllMocks()`, `vi.resetAllMocks()`, or `vi.restoreAllMocks()`. The Vitest config already handles cleanup (`mockReset: true`, `unstubGlobals: true`, `unstubEnvs: true`).
 
 ### E2E Tests (Playwright)
 
