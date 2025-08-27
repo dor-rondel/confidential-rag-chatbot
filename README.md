@@ -22,13 +22,13 @@ A privacy-first RAG chatbot that lets you upload text files and chat with them u
 
 ```bash
 # Start services
-docker-compose up -d
+docker compose up -d
 
 # Install dependencies
-npm install
+pnpm i
 
 # Run development server
-npm run dev
+pnpm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) to start chatting with your documents.
