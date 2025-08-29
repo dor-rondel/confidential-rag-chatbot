@@ -15,7 +15,7 @@ jobs:
           node-version: '24.x'
 
       - name: Clean install dependencies
-        run: npm ci
+        run: npm i
 
       - name: Check ESLint
         run: npm run lint
