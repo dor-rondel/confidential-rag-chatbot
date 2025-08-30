@@ -1,9 +1,8 @@
-
 import { render, screen } from '@testing-library/react';
 import { Message } from './message';
 import { expect, describe, it } from 'vitest';
 
-describe('Message', () => {
+describe('<Message />', () => {
   it('should render a user message with correct styles', () => {
     render(<Message role="user">Hello</Message>);
     const message = screen.getByTestId('message');

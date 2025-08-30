@@ -1,9 +1,8 @@
-
 import { render, screen } from '@testing-library/react';
 import { Button } from './button';
 import { expect, vi, describe, it } from 'vitest';
 
-describe('Button', () => {
+describe('<Button />', () => {
   it('should render with default styles', () => {
     render(<Button>Click me</Button>);
     const button = screen.getByRole('button', { name: /click me/i });

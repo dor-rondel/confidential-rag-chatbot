@@ -1,9 +1,8 @@
-
 import { render, screen } from '@testing-library/react';
 import { Label } from './label';
 import { expect, describe, it } from 'vitest';
 
-describe('Label', () => {
+describe('<Label />', () => {
   it('should render with default styles', () => {
     render(<Label>Hello</Label>);
     const label = screen.getByText('Hello');

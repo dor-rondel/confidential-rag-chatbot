@@ -1,10 +1,9 @@
-
 import { render, screen } from '@testing-library/react';
 import { FileUploadForm } from './file-upload-form';
 import { expect, vi, describe, it } from 'vitest';
 import userEvent from '@testing-library/user-event';
 
-describe('FileUploadForm', () => {
+describe('<FileUploadForm />', () => {
   it('should render the form', () => {
     render(<FileUploadForm onUploadSuccess={() => {}} />);
     expect(screen.getByText('Upload Your Document')).toBeInTheDocument();

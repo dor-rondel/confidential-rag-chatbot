@@ -1,9 +1,8 @@
-
 import { render, screen } from '@testing-library/react';
 import { Card } from './card';
 import { expect, describe, it } from 'vitest';
 
-describe('Card', () => {
+describe('<Card />', () => {
   it('should render with default styles', () => {
     render(<Card>Hello</Card>);
     const card = screen.getByTestId('card');

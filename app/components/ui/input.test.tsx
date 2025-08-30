@@ -1,10 +1,9 @@
-
 import { render, screen } from '@testing-library/react';
 import { Input } from './input';
 import { expect, vi, describe, it } from 'vitest';
 import userEvent from '@testing-library/user-event';
 
-describe('Input', () => {
+describe('<Input />', () => {
   it('should render with default styles', () => {
     render(<Input />);
     const input = screen.getByRole('textbox');
