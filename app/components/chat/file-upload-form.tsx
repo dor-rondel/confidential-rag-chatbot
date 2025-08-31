@@ -1,10 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useActionState } from 'react';
 import { Card } from '@/app/components/ui/card';
 import { Label } from '@/app/components/ui/label';
 import { Input } from '@/app/components/ui/input';
 import { Button } from '@/app/components/ui/button';
+import { uploadFileAction, type UploadActionState } from '@/app/actions/upload';
+
+const initialUploadState: UploadActionState = { status: 'idle' };
 
 /**
  * The file upload form component.
@@ -19,6 +22,16 @@ export function FileUploadForm({
   onUploadSuccess: () => void;
 }) {
   const [file, setFile] = useState<File | null>(null);
+  const [state, formAction, pending] = useActionState<
+    UploadActionState,
+    FormData
+  >(uploadFileAction, initialUploadState);
+
+  useEffect(() => {
+    if (state.status === 'success') {
+      onUploadSuccess();
+    }
+  }, [state.status, onUploadSuccess]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -29,15 +42,8 @@ export function FileUploadForm({
     }
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (file) {
-      onUploadSuccess();
-    }
-  };
-
   return (
-    <form onSubmit={handleSubmit}>
+    <form action={formAction} encType="multipart/form-data">
       <Card className="w-full max-w-lg">
         <div className="text-center">
           <h2 className="text-2xl font-semibold">Upload Your Document</h2>
@@ -46,21 +52,33 @@ export function FileUploadForm({
           </p>
         </div>
         <div className="mt-6">
-          <Label htmlFor="file-upload" className="sr-only">
+          <Label htmlFor="file" className="sr-only">
             File upload
           </Label>
           <Input
-            id="file-upload"
-            name="file-upload"
+            id="file"
+            name="file"
             type="file"
             onChange={handleFileChange}
             accept=".txt"
+            disabled={pending}
           />
         </div>
+        {/* Status messages */}
+        {state.status === 'error' && state.message && (
+          <p className="mt-4 text-sm text-error" role="alert">
+            {state.message}
+          </p>
+        )}
+        {state.status === 'success' && state.message && (
+          <p className="mt-4 text-sm text-success" role="status">
+            {state.message}
+          </p>
+        )}
         <div className="mt-6">
           {file && (
-            <Button type="submit" className="w-full">
-              Start Chatting
+            <Button type="submit" className="w-full" disabled={pending}>
+              {pending ? 'Uploading...' : 'Start Chatting'}
             </Button>
           )}
         </div>
