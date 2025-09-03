@@ -1,7 +1,6 @@
 'use server';
 
-// Temporary lightweight upload validation action.
-// Future steps: chunking, embedding, and persistence into ChromaDB.
+import { ingestDocument } from '@/app/lib/langchain/ingestion';
 
 export type UploadActionState = {
   status: 'idle' | 'success' | 'error';
@@ -50,7 +49,12 @@ export async function uploadFileAction(
     };
   }
 
-  // Placeholder: future ingestion, chunking & embedding will go here.
-
-  return { status: 'success', message: 'File uploaded successfully.' };
+  try {
+    await ingestDocument(file);
+    return { status: 'success', message: 'File ingested successfully.' };
+  } catch (error) {
+    console.error(error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    return { status: 'error', message: `Ingestion failed: ${errorMessage}` };
+  }
 }

@@ -15,7 +15,7 @@ A privacy-first RAG chatbot that enables users to upload TXT files as knowledge 
 - **RAG Pipeline**: LangChain.js
 - **Vector Store**: ChromaDB
 - **LLM**: Ollama (open-source models)
-- **Embeddings**: HuggingFace.js
+- **Embeddings**: Ollama
 - **Orchestration**: Docker Compose
 
 ### Key Components
@@ -211,7 +211,7 @@ const theme = {
 ## RAG Pipeline Flow
 
 1. **Upload**: User uploads TXT file via Server Action
-2. **Chunk & Embed**: LangChain.js splits document + HuggingFace.js creates embeddings
+2. **Chunk & Embed**: LangChain.js splits document + Ollama creates embeddings
 3. **Store**: ChromaDB persists vectors
 4. **Query**: User asks question via Server Action
 5. **Retrieve**: ChromaDB finds relevant chunks
