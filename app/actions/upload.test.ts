@@ -1,52 +1,67 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
+import { uploadFileAction, type UploadActionState } from './upload';
 
 // Hoisted mocks
 const ingestionState = vi.hoisted(() => ({ ingestDocument: vi.fn() }));
 
 vi.mock('@/app/lib/langchain/ingestion', () => ({
-  ingestDocument: (...args: unknown[]) => ingestionState.ingestDocument(...args),
+  ingestDocument: (...args: unknown[]) =>
+    ingestionState.ingestDocument(...args),
 }));
 
-import { uploadFileAction, type UploadActionState } from './upload';
-
-function createTxtFile(name: string, content: string, type = 'text/plain'): File {
+function createTxtFile(
+  name: string,
+  content: string,
+  type = 'text/plain'
+): File {
   return new File([content], name, { type });
 }
 
-async function run(formData: FormData, prev: UploadActionState = { status: 'idle' }) {
+async function run(
+  formData: FormData,
+  prev: UploadActionState = { status: 'idle' }
+) {
   return uploadFileAction(prev, formData);
 }
 
 describe('uploadFileAction', () => {
-  beforeEach(() => {
-    ingestionState.ingestDocument.mockReset();
-  });
-
   it('returns error when no file provided', async () => {
     const fd = new FormData();
     const res = await run(fd);
-    expect(res).toStrictEqual({ status: 'error', message: 'No file provided.' });
+    expect(res).toStrictEqual({
+      status: 'error',
+      message: 'No file provided.',
+    });
   });
 
   it('returns error when field is not a File instance', async () => {
     const fd = new FormData();
     fd.set('file', 'not-a-file');
     const res = await run(fd);
-    expect(res).toStrictEqual({ status: 'error', message: 'No file provided.' });
+    expect(res).toStrictEqual({
+      status: 'error',
+      message: 'No file provided.',
+    });
   });
 
   it('rejects non .txt extension', async () => {
     const fd = new FormData();
     fd.set('file', createTxtFile('readme.md', 'content'));
     const res = await run(fd);
-    expect(res).toStrictEqual({ status: 'error', message: 'Only .txt files are allowed.' });
+    expect(res).toStrictEqual({
+      status: 'error',
+      message: 'Only .txt files are allowed.',
+    });
   });
 
   it('rejects invalid mime type even with .txt extension', async () => {
     const fd = new FormData();
     fd.set('file', createTxtFile('file.txt', 'data', 'application/pdf'));
     const res = await run(fd);
-    expect(res).toStrictEqual({ status: 'error', message: 'Invalid file type.' });
+    expect(res).toStrictEqual({
+      status: 'error',
+      message: 'Invalid file type.',
+    });
   });
 
   it('rejects empty file', async () => {
@@ -76,7 +91,10 @@ describe('uploadFileAction', () => {
     const res = await run(fd);
     expect(ingestionState.ingestDocument).toHaveBeenCalledTimes(1);
     expect(ingestionState.ingestDocument).toHaveBeenCalledWith(file);
-    expect(res).toStrictEqual({ status: 'success', message: 'File ingested successfully.' });
+    expect(res).toStrictEqual({
+      status: 'success',
+      message: 'File ingested successfully.',
+    });
   });
 
   it('returns error when ingestion throws', async () => {
