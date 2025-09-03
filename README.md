@@ -13,7 +13,7 @@ A privacy-first RAG chatbot that lets you upload text files and chat with them u
 ## Tech Stack
 
 - **Frontend**: Next.js 15 + TypeScript + Tailwind CSS
-- **RAG Pipeline**: LangChain.js + HuggingFace embeddings
+- **RAG Pipeline**: LangChain.js + Ollama embeddings
 - **Vector Store**: ChromaDB
 - **LLM**: Ollama (open-source models)
 - **Orchestration**: Docker Compose

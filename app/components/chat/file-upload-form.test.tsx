@@ -1,7 +1,15 @@
-import { render, screen } from '@testing-library/react';
-import { FileUploadForm } from './file-upload-form';
 import { expect, vi, describe, it } from 'vitest';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { FileUploadForm } from './file-upload-form';
+
+// Hoisted mock for the server action to force a success transition
+vi.mock('@/app/actions/upload', () => ({
+  uploadFileAction: vi.fn(async () => ({
+    status: 'success',
+    message: 'File ingested successfully.',
+  })),
+}));
 
 describe('<FileUploadForm />', () => {
   it('should render the form', () => {
@@ -38,6 +46,6 @@ describe('<FileUploadForm />', () => {
     const submitButton = screen.getByRole('button', { name: /start chatting/i });
     await userEvent.click(submitButton);
 
-    expect(onUploadSuccess).toHaveBeenCalledTimes(1);
+    await waitFor(() => expect(onUploadSuccess).toHaveBeenCalledTimes(1));
   });
 });
