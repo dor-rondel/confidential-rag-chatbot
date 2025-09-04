@@ -8,7 +8,7 @@
 export function Card({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
-      data-testid="card"
+      data-testid='card'
       className={`bg-neutral-100 border border-neutral-200 rounded-lg shadow-sm p-6 ${
         className || ''
       }`}

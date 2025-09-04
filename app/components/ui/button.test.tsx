@@ -11,7 +11,7 @@ describe('<Button />', () => {
   });
 
   it('should apply custom className', () => {
-    render(<Button className="custom-class">Click me</Button>);
+    render(<Button className='custom-class'>Click me</Button>);
     const button = screen.getByRole('button', { name: /click me/i });
     expect(button.className).toContain('custom-class');
   });

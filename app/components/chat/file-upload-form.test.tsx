@@ -22,7 +22,9 @@ describe('<FileUploadForm />', () => {
     const onUploadSuccess = vi.fn();
     render(<FileUploadForm onUploadSuccess={onUploadSuccess} />);
 
-    const submitButton = screen.queryByRole('button', { name: /start chatting/i });
+    const submitButton = screen.queryByRole('button', {
+      name: /start chatting/i,
+    });
     expect(submitButton).not.toBeInTheDocument();
 
     const fileInput = screen.getByLabelText('File upload');
@@ -43,7 +45,9 @@ describe('<FileUploadForm />', () => {
     const file = new File(['hello'], 'hello.txt', { type: 'text/plain' });
     await userEvent.upload(fileInput, file);
 
-    const submitButton = screen.getByRole('button', { name: /start chatting/i });
+    const submitButton = screen.getByRole('button', {
+      name: /start chatting/i,
+    });
     await userEvent.click(submitButton);
 
     await waitFor(() => expect(onUploadSuccess).toHaveBeenCalledTimes(1));

@@ -12,7 +12,7 @@ describe('<Input />', () => {
   });
 
   it('should apply custom className', () => {
-    render(<Input className="custom-class" />);
+    render(<Input className='custom-class' />);
     const input = screen.getByRole('textbox');
     expect(input.className).toContain('custom-class');
   });
@@ -26,7 +26,7 @@ describe('<Input />', () => {
   });
 
   it('should have a placeholder', () => {
-    render(<Input placeholder="Enter text" />);
+    render(<Input placeholder='Enter text' />);
     expect(screen.getByPlaceholderText('Enter text')).toBeInTheDocument();
   });
 });

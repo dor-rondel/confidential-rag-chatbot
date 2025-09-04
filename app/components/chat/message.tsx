@@ -16,7 +16,8 @@ type MessageProps = {
 
 const roleStyles = {
   user: 'bg-primary-500 text-white self-end rounded-lg rounded-br-none',
-  assistant: 'bg-neutral-200 text-neutral-900 self-start rounded-lg rounded-bl-none',
+  assistant:
+    'bg-neutral-200 text-neutral-900 self-start rounded-lg rounded-bl-none',
 };
 
 /**
@@ -28,7 +29,7 @@ const roleStyles = {
  */
 export function Message({ role, children }: MessageProps) {
   return (
-    <div data-testid="message" className={`max-w-md p-3 ${roleStyles[role]}`}>
+    <div data-testid='message' className={`max-w-md p-3 ${roleStyles[role]}`}>
       {children}
     </div>
   );

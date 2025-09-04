@@ -11,7 +11,7 @@ describe('<Card />', () => {
   });
 
   it('should apply custom className', () => {
-    render(<Card className="custom-class">Hello</Card>);
+    render(<Card className='custom-class'>Hello</Card>);
     const card = screen.getByTestId('card');
     expect(card.className).toContain('custom-class');
   });
@@ -20,7 +20,7 @@ describe('<Card />', () => {
     render(
       <Card>
         <p>Child element</p>
-      </Card>,
+      </Card>
     );
     expect(screen.getByText('Child element')).toBeInTheDocument();
   });

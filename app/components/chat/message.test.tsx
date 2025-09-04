@@ -4,7 +4,7 @@ import { expect, describe, it } from 'vitest';
 
 describe('<Message />', () => {
   it('should render a user message with correct styles', () => {
-    render(<Message role="user">Hello</Message>);
+    render(<Message role='user'>Hello</Message>);
     const message = screen.getByTestId('message');
     expect(message).toBeInTheDocument();
     expect(message.className).toContain('bg-primary-500');
@@ -12,7 +12,7 @@ describe('<Message />', () => {
   });
 
   it('should render an assistant message with correct styles', () => {
-    render(<Message role="assistant">Hi there</Message>);
+    render(<Message role='assistant'>Hi there</Message>);
     const message = screen.getByTestId('message');
     expect(message).toBeInTheDocument();
     expect(message.className).toContain('bg-neutral-200');
@@ -21,9 +21,9 @@ describe('<Message />', () => {
 
   it('should render children', () => {
     render(
-      <Message role="user">
+      <Message role='user'>
         <p>Child element</p>
-      </Message>,
+      </Message>
     );
     expect(screen.getByText('Child element')).toBeInTheDocument();
   });

@@ -43,41 +43,41 @@ export function FileUploadForm({
   };
 
   return (
-    <form action={formAction} encType="multipart/form-data">
-      <Card className="w-full max-w-lg">
-        <div className="text-center">
-          <h2 className="text-2xl font-semibold">Upload Your Document</h2>
-          <p className="mt-2 text-neutral-500">
+    <form action={formAction} encType='multipart/form-data'>
+      <Card className='w-full max-w-lg'>
+        <div className='text-center'>
+          <h2 className='text-2xl font-semibold'>Upload Your Document</h2>
+          <p className='mt-2 text-neutral-500'>
             Only .txt files are supported at the moment.
           </p>
         </div>
-        <div className="mt-6">
-          <Label htmlFor="file" className="sr-only">
+        <div className='mt-6'>
+          <Label htmlFor='file' className='sr-only'>
             File upload
           </Label>
           <Input
-            id="file"
-            name="file"
-            type="file"
+            id='file'
+            name='file'
+            type='file'
             onChange={handleFileChange}
-            accept=".txt"
+            accept='.txt'
             disabled={pending}
           />
         </div>
         {/* Status messages */}
         {state.status === 'error' && state.message && (
-          <p className="mt-4 text-sm text-error" role="alert">
+          <p className='mt-4 text-sm text-error' role='alert'>
             {state.message}
           </p>
         )}
         {state.status === 'success' && state.message && (
-          <p className="mt-4 text-sm text-success" role="status">
+          <p className='mt-4 text-sm text-success' role='status'>
             {state.message}
           </p>
         )}
-        <div className="mt-6">
+        <div className='mt-6'>
           {file && (
-            <Button type="submit" className="w-full" disabled={pending}>
+            <Button type='submit' className='w-full' disabled={pending}>
               {pending ? 'Uploading...' : 'Start Chatting'}
             </Button>
           )}

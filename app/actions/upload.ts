@@ -54,7 +54,8 @@ export async function uploadFileAction(
     return { status: 'success', message: 'File ingested successfully.' };
   } catch (error) {
     console.error(error);
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    const errorMessage =
+      error instanceof Error ? error.message : 'Unknown error';
     return { status: 'error', message: `Ingestion failed: ${errorMessage}` };
   }
 }
