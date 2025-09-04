@@ -15,16 +15,16 @@ services:
       retries: 5
       start_period: 10s
 
-  # One-off init container to ensure the embedding model is pulled.
-  # Waits for the ollama API by polling `ollama list` (no curl dependency).
+  # One-off init container to ensure the embedding model is pulled after ollama is healthy.
   ollama-model-pull:
     image: ollama/ollama:latest
     depends_on:
-      - ollama
+      ollama:
+        condition: service_healthy
     volumes:
       - ./ollama_data:/root/.ollama
     entrypoint: ["/bin/sh", "-c"]
-    command: ["until ollama list >/dev/null 2>&1; do echo 'Waiting for ollama...'; sleep 2; done; echo 'Ollama is up'; ollama pull nomic-embed-text || echo 'Model already present' "]
+    command: ["ollama pull nomic-embed-text || echo 'Model already present'"]
     restart: "no"
 
   chroma:
