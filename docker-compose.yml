@@ -8,6 +8,24 @@ services:
     volumes:
       - ./ollama_data:/root/.ollama
     container_name: ollama
+    healthcheck:
+      test: ["CMD-SHELL", "ollama list >/dev/null 2>&1 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # One-off init container to ensure the embedding model is pulled after ollama is healthy.
+  ollama-model-pull:
+    image: ollama/ollama:latest
+    depends_on:
+      ollama:
+        condition: service_healthy
+    volumes:
+      - ./ollama_data:/root/.ollama
+    entrypoint: ["/bin/sh", "-c"]
+    command: ["ollama pull nomic-embed-text || echo 'Model already present'"]
+    restart: "no"
 
   chroma:
     image: chromadb/chroma:latest
