@@ -11,7 +11,7 @@ describe('<Label />', () => {
   });
 
   it('should apply custom className', () => {
-    render(<Label className="custom-class">Hello</Label>);
+    render(<Label className='custom-class'>Hello</Label>);
     const label = screen.getByText('Hello');
     expect(label.className).toContain('custom-class');
   });
@@ -20,7 +20,7 @@ describe('<Label />', () => {
     render(
       <Label>
         <span>Child element</span>
-      </Label>,
+      </Label>
     );
     expect(screen.getByText('Child element')).toBeInTheDocument();
   });

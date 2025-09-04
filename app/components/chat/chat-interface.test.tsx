@@ -16,7 +16,9 @@ describe('ChatInterface', () => {
 
   it('should render the initial assistant message', () => {
     render(<ChatInterface />);
-    expect(screen.getByText(/Hello! I am an AI assistant./)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Hello! I am an AI assistant./)
+    ).toBeInTheDocument();
   });
 
   it('should add a new user message on submit', async () => {

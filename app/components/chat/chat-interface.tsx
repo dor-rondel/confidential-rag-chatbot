@@ -49,9 +49,9 @@ export function ChatInterface() {
   };
 
   return (
-    <Card className="w-full max-w-2xl h-[70vh] flex flex-col">
-      <div className="flex-1 p-6 overflow-y-auto">
-        <div className="flex flex-col gap-4">
+    <Card className='w-full max-w-2xl h-[70vh] flex flex-col'>
+      <div className='flex-1 p-6 overflow-y-auto'>
+        <div className='flex flex-col gap-4'>
           {messages.map((msg, index) => (
             <Message key={index} role={msg.role}>
               {msg.content}
@@ -60,16 +60,16 @@ export function ChatInterface() {
           <div ref={messagesEndRef} />
         </div>
       </div>
-      <form onSubmit={handleSubmit} className="p-4 border-t border-neutral-200">
-        <div className="flex items-center gap-2">
+      <form onSubmit={handleSubmit} className='p-4 border-t border-neutral-200'>
+        <div className='flex items-center gap-2'>
           <Input
-            type="text"
-            placeholder="Type your message..."
-            className="flex-1"
+            type='text'
+            placeholder='Type your message...'
+            className='flex-1'
             value={inputValue}
             onChange={handleInputChange}
           />
-          <Button type="submit">Send</Button>
+          <Button type='submit'>Send</Button>
         </div>
       </form>
     </Card>
