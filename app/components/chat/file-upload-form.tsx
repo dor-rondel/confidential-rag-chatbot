@@ -14,7 +14,7 @@ const initialUploadState: UploadActionState = { status: 'idle' };
  * It allows users to select and upload a .txt file.
  *
  * @param {{ onUploadSuccess: () => void }} props - Props for the component.
- * 
+ *
  * @returns {JSX.Element} The file upload form component.
  */
 export function FileUploadForm({

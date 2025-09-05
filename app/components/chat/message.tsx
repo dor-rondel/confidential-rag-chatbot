@@ -19,7 +19,7 @@ const roleStyles = {
  * It styles the message differently based on the role (user or assistant).
  *
  * @param {MessageProps} props - The props for the component.
- * 
+ *
  * @returns {JSX.Element} The message component.
  */
 export function Message({ role, children }: MessageProps) {

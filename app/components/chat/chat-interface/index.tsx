@@ -82,14 +82,24 @@ export function ChatInterface() {
       fullText = await processSSEStream(
         reader,
         (newContent: string) => {
-          setMessages(prev => prev.map(m => (m.id === assistantId ? { ...m, content: newContent } : m)));
+          setMessages(prev =>
+            prev.map(m =>
+              m.id === assistantId ? { ...m, content: newContent } : m
+            )
+          );
         },
         () => {
-          setMessages(prev => prev.map(m => (m.id === assistantId ? { ...m, content: fullText } : m)));
+          setMessages(prev =>
+            prev.map(m =>
+              m.id === assistantId ? { ...m, content: fullText } : m
+            )
+          );
         },
         (final: string) => {
           fullText = final;
-          setMessages(prev => prev.map(m => (m.id === assistantId ? { ...m, content: final } : m)));
+          setMessages(prev =>
+            prev.map(m => (m.id === assistantId ? { ...m, content: final } : m))
+          );
         }
       );
 
@@ -97,11 +107,21 @@ export function ChatInterface() {
       const maybeFinal = finalizeBuffer(reader.getRemainder(), fullText);
       if (maybeFinal !== fullText) {
         fullText = maybeFinal;
-        setMessages(prev => prev.map(m => (m.id === assistantId ? { ...m, content: fullText } : m)));
+        setMessages(prev =>
+          prev.map(m =>
+            m.id === assistantId ? { ...m, content: fullText } : m
+          )
+        );
       }
     } catch (e) {
       console.error('Streaming chat error:', e);
-      setMessages(prev => prev.map(m => (m.id === assistantId ? { ...m, content: 'Error retrieving response.' } : m)));
+      setMessages(prev =>
+        prev.map(m =>
+          m.id === assistantId
+            ? { ...m, content: 'Error retrieving response.' }
+            : m
+        )
+      );
     } finally {
       setLoading(false);
     }
