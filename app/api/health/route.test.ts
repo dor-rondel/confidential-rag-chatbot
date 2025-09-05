@@ -1,19 +1,19 @@
 import { describe, it, expect, vi } from 'vitest';
 import { GET } from './route';
-import { getOllamaHealth } from '@/app/lib/ollama';
-import { getChromaHealth } from '@/app/lib/chromadb';
+import { getOllamaHealth } from '@/app/lib/ollama/index';
+import { getChromaHealth } from '@/app/lib/chroma/health';
 
-vi.mock('@/app/lib/ollama', () => ({
+vi.mock('@/app/lib/ollama/index', () => ({
   getOllamaHealth: vi.fn(),
 }));
 
-vi.mock('@/app/lib/chromadb', () => ({
+vi.mock('@/app/lib/chroma/health', () => ({
   getChromaHealth: vi.fn(),
 }));
 
 vi.mock('next/server', () => ({
   NextResponse: {
-    json: vi.fn(data => data),
+    json: vi.fn((data: unknown) => data),
   },
 }));
 
@@ -87,7 +87,7 @@ describe('Health API Route', () => {
 
   it('should return an unexpected error status on caught exception', async () => {
     ollamaMock.mockRejectedValue(new Error('Network error'));
-    chromaMock.mockResolvedValue({ status: 'ok' }); // This won't be called due to Promise.all short-circuiting
+    chromaMock.mockResolvedValue({ status: 'ok' });
 
     const response = await GET();
     expect(response).toEqual({

@@ -1,11 +1,11 @@
 import { render, screen } from '@testing-library/react';
-import { ChatInterface } from './chat-interface';
+import { ChatInterface } from '.';
 import { expect, describe, it, vi, beforeAll } from 'vitest';
 import userEvent from '@testing-library/user-event';
 
 const scrollIntoViewMock = vi.fn();
 
-describe('ChatInterface', () => {
+describe('<ChatInterface />', () => {
   beforeAll(() => {
     Object.defineProperty(Element.prototype, 'scrollIntoView', {
       value: scrollIntoViewMock,

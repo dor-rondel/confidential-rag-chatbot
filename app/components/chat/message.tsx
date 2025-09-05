@@ -4,13 +4,7 @@ import type { ReactNode } from 'react';
  * Props for the Message component.
  */
 type MessageProps = {
-  /**
-   * The role of the message sender.
-   */
   role: 'user' | 'assistant';
-  /**
-   * The content of the message.
-   */
   children: ReactNode;
 };
 
@@ -25,6 +19,7 @@ const roleStyles = {
  * It styles the message differently based on the role (user or assistant).
  *
  * @param {MessageProps} props - The props for the component.
+ * 
  * @returns {JSX.Element} The message component.
  */
 export function Message({ role, children }: MessageProps) {
