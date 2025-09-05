@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { getOllamaHealth } from '@/app/lib/ollama';
-import { getChromaHealth } from '@/app/lib/chromadb';
+import { getOllamaHealth } from '@/app/lib/ollama/';
+import { getChromaHealth } from '@/app/lib/chroma/health';
 import { HealthApiResponse } from '@/app/lib/types';
 
 /**

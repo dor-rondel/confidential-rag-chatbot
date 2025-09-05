@@ -3,34 +3,54 @@ version: '3.8'
 services:
   ollama:
     image: ollama/ollama:latest
+    container_name: ollama
     ports:
       - '11435:11434'
     volumes:
       - ./ollama_data:/root/.ollama
-    container_name: ollama
+    environment:
+      OLLAMA_NUM_PARALLEL: 2
+    entrypoint: [
+        '/bin/sh',
+        '-c',
+        "set -e; \
+        ollama serve & \
+        SERVEPID=$$!; \
+        echo 'Waiting for Ollama daemon...'; \
+        for i in $$(seq 1 60); do \
+        if curl -sf http://127.0.0.1:11435/api/version >/dev/null; then \
+        echo 'Ollama is up'; break; \
+        fi; \
+        sleep 1; \
+        done; \
+        MODELS='nomic-embed-text llama3'; \
+        echo \"Ensuring models: $$MODELS\"; \
+        for m in $$MODELS; do \
+        if ! ollama list 2>/dev/null | awk '{print $$1}' | grep -qx $$m; then \
+        echo \"Pulling $$m...\"; \
+        ollama pull $$m || { echo \"Failed to pull $$m\"; kill $$SERVEPID; exit 1; }; \
+        else \
+        echo \"$$m already present\"; \
+        fi; \
+        done; \
+        echo 'Models ready.'; \
+        wait $$SERVEPID",
+      ]
     healthcheck:
-      test: ['CMD-SHELL', 'ollama list >/dev/null 2>&1 || exit 1']
+      test:
+        [
+          'CMD-SHELL',
+          'ollama list | grep -q "^nomic-embed-text" && ollama list | grep -q "^llama3"',
+        ]
       interval: 10s
       timeout: 5s
-      retries: 5
-      start_period: 10s
-
-  # One-off init container to ensure the embedding model is pulled after ollama is healthy.
-  ollama-model-pull:
-    image: ollama/ollama:latest
-    depends_on:
-      ollama:
-        condition: service_healthy
-    volumes:
-      - ./ollama_data:/root/.ollama
-    entrypoint: ['/bin/sh', '-c']
-    command: ["ollama pull nomic-embed-text || echo 'Model already present'"]
-    restart: 'no'
+      retries: 6
+      start_period: 70s
 
   chroma:
     image: chromadb/chroma:latest
+    container_name: chroma
     ports:
       - '8000:8000'
     volumes:
       - ./chroma_data:/chroma/.chroma/index
-    container_name: chroma
