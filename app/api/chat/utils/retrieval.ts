@@ -1,4 +1,5 @@
 import { getVectorStoreRetriever } from '@/app/lib/langchain/retrieval';
+import { RetrieverLike } from './types';
 
 /**
  * Retrieve relevant documents for a question using the vector store retriever.
@@ -13,7 +14,8 @@ export async function retrieveContext(question: string): Promise<{
   documents: { pageContent: string }[];
   contextText: string;
 }> {
-  const retriever = await getVectorStoreRetriever();
+  const retriever =
+    (await getVectorStoreRetriever()) as unknown as RetrieverLike;
   const documents = await retriever.invoke(question);
   const contextText = documents
     .map((d: { pageContent: string }) => d.pageContent)
