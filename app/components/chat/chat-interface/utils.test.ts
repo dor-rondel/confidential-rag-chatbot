@@ -26,10 +26,6 @@ type ReaderLike = AsyncGenerator<SSEEvent, void, unknown> & {
 };
 
 describe('chat-interface utils', () => {
-  beforeEach(() => {
-    vi.unstubAllEnvs();
-  });
-
   describe('buildUserMessage', () => {
     it('trims input and sets incremental id', () => {
       const base: MessageType[] = [

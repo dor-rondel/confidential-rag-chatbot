@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { ChromaConfig, EmbeddingOpts } from './types';
 
 const embeddingCalls: EmbeddingOpts[] = [];
@@ -44,10 +44,6 @@ describe('getVectorStoreRetriever', () => {
     process.env.OLLAMA_BASE_URL = 'http://localhost:11434';
     process.env.CHROMA_COLLECTION_NAME = 'test_collection';
     process.env.CHROMA_URL = 'http://localhost:8000';
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
   });
 
   it('constructs OllamaEmbeddings and Chroma with expected env vars', async () => {
