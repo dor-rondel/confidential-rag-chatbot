@@ -1,13 +1,5 @@
-import type { Message } from '@/app/lib/types';
 import { sharedMemory } from '@/app/lib/langchain/memory';
-import { buildChain } from './chain';
-
-export type ChatStreamOptions = {
-  question: string;
-  contextText: string;
-  latestMessage: Message;
-  chain: ReturnType<typeof buildChain>;
-};
+import { ChatStreamOptions } from './types';
 
 /**
  * Create an SSE (Server-Sent Events) ReadableStream for the chat response.
@@ -43,7 +35,7 @@ export function createChatEventStream({
             question,
             context: contextText,
           });
-          for await (const chunk of tokenStream) {
+          for await (const chunk of tokenStream as AsyncIterable<unknown>) {
             const textChunk =
               typeof chunk === 'string' ? chunk : String(chunk ?? '');
             if (textChunk === '') continue; // preserve space-only tokens

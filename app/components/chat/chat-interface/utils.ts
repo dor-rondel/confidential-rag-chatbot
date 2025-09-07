@@ -61,6 +61,22 @@ export function createSSEReader(
 ) {
   let buffer = '';
 
+  function parseFrame(rawEvent: string) {
+    const lines = rawEvent.split('\n');
+    let eventType: string | undefined;
+    const dataLines: string[] = [];
+    for (const line of lines) {
+      if (line.startsWith('event:')) eventType = line.slice(6).trim();
+      else if (line.startsWith('data:')) {
+        let v = line.slice(5); // keeps possible leading space
+        if (v.startsWith(' ')) v = v.slice(1); // trim single leading space (tests expect)
+        dataLines.push(v);
+      }
+    }
+    const dataRaw = dataLines.join('\n');
+    return { eventType, dataRaw };
+  }
+
   async function* stream(): AsyncGenerator<SSEEvent, void, unknown> {
     const decoder = new TextDecoder();
     while (true) {
@@ -72,14 +88,7 @@ export function createSSEReader(
       while ((sepIndex = buffer.indexOf('\n\n')) !== -1) {
         const rawEvent = buffer.slice(0, sepIndex);
         buffer = buffer.slice(sepIndex + 2);
-        const lines = rawEvent.split('\n');
-        let eventType: string | undefined;
-        const dataLines: string[] = [];
-        for (const line of lines) {
-          if (line.startsWith('event:')) eventType = line.slice(6).trim();
-          else if (line.startsWith('data:')) dataLines.push(line.slice(5));
-        }
-        const dataRaw = dataLines.join('\n');
+        const { eventType, dataRaw } = parseFrame(rawEvent);
         if (!dataRaw) continue;
         if (eventType === 'token') {
           yield { type: 'token', data: dataRaw } as SSETokenEvent;
@@ -102,6 +111,34 @@ export function createSSEReader(
           }
         }
       }
+    }
+    // End of stream: attempt to parse a trailing partial frame (no terminating blank line)
+    if (buffer.includes('event:') && buffer.includes('data:')) {
+      const snapshot = buffer; // retain remainder per tests
+      const { eventType, dataRaw } = parseFrame(snapshot);
+      if (dataRaw) {
+        if (eventType === 'token') {
+          yield { type: 'token', data: dataRaw } as SSETokenEvent;
+        } else if (eventType === 'error') {
+          try {
+            const parsed = JSON.parse(dataRaw);
+            yield { type: 'error', data: parsed } as SSErrorEvent;
+          } catch {
+            yield {
+              type: 'error',
+              data: { status: 'error', message: 'Unknown error' },
+            } as SSErrorEvent;
+          }
+        } else if (eventType === 'meta') {
+          try {
+            const meta = JSON.parse(dataRaw);
+            yield { type: 'meta', data: meta } as SSEMetaEvent;
+          } catch {
+            // ignore malformed meta
+          }
+        }
+      }
+      // do NOT clear buffer so getRemainder() exposes raw partial frame
     }
   }
 
