@@ -23,10 +23,10 @@ A privacy-first RAG chatbot that enables users to upload TXT files as knowledge 
 ```
 /app                    # Next.js 15 app router
   /actions              # Server Actions
-    /chat.ts            # Chat action
     /upload.ts          # File upload action (includes chunking & embedding)
   /api                  # API routes (fallback only)
     /health             # Health check endpoint (Ollama and ChromaDB)
+    /chat               # Chat endpoint for long lasting memory
   /components           # React components
     /ui                 # Reusable UI components
     /chat               # Chat-specific components
@@ -35,7 +35,6 @@ A privacy-first RAG chatbot that enables users to upload TXT files as knowledge 
     /chromadb           # Vector store client
     /ollama             # LLM client
     /theme              # Styling theme & constants
-  /styles               # Tailwind config & globals
 /tests                  # Test files
   /e2e                  # Playwright E2E tests (*.spec.ts)
 /docker-compose.yml     # Services orchestration
